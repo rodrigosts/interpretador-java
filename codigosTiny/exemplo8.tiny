@@ -1,0 +1,10 @@
+b: write ('xxx') 
+   write ('=') 
+   writeln 
+   read (x) 
+   while (x > 9) 
+      goto a 
+   endw 
+   goto b 
+a: write ('fim') 
+   endp 

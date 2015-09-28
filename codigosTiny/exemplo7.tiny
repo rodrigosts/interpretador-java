@@ -1,0 +1,7 @@
+   write ('xxx') 
+   write ('=') 
+   read (x) 
+   goto a 
+   writeln 
+a: write (x) 
+   endp 
