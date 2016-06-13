@@ -1,4 +1,4 @@
-package comandos;
+package commandos;
 
 import ambiente.Memoria;
 import expressoes.Expressao;

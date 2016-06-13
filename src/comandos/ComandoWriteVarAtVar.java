@@ -1,4 +1,4 @@
-package comandos;
+package commandos;
 
 import ambiente.IOPadrao;
 import ambiente.Memoria;
