@@ -1,20 +1,20 @@
 package interpretadortiny;
 
 import ambiente.Memoria;
-import comandos.Comando;
-import comandos.ComandoAtrib;
-import comandos.ComandoEndp;
-import comandos.ComandoEndw;
-import comandos.ComandoGoto;
-import comandos.ComandoRead;
-import comandos.ComandoWhile;
-import comandos.ComandoWrite;
-import comandos.ComandoWriteVar;
-import comandos.ComandoWriteVarAtVar;
-import comandos.ComandoWriteVarIndex;
-import comandos.ComandoWriteln;
-import comandos.Condicao;
-import comandos.Label;
+import commandos.Comando;
+import commandos.ComandoAtrib;
+import commandos.ComandoEndp;
+import commandos.ComandoEndw;
+import commandos.ComandoGoto;
+import commandos.ComandoRead;
+import commandos.ComandoWhile;
+import commandos.ComandoWrite;
+import commandos.ComandoWriteVar;
+import commandos.ComandoWriteVarAtVar;
+import commandos.ComandoWriteVarIndex;
+import commandos.ComandoWriteln;
+import commandos.Condicao;
+import commandos.Label;
 import expressoes.Expressao;
 import expressoes.ExpressaoBinaria;
 import expressoes.ExpressaoLiteral;
@@ -39,7 +39,7 @@ class Interpretador {
    private String palavraAtual;
    private ArquivoFonte arq;
    private Memoria escopo;
-   private ArrayList<Comando> comandos;
+   private ArrayList<Comando> commandos;
    private HashMap<String, Integer> labels;
    private HashMap<ComandoGoto, Integer> gotos;
    private Stack<ComandoWhile> whiles_obj;
@@ -49,7 +49,7 @@ class Interpretador {
    public Interpretador(String url) {
       this.url = url;
       escopo = new Memoria();
-      comandos = new ArrayList<Comando>();
+      commandos = new ArrayList<Comando>();
       labels = new HashMap<String, Integer>();
       whiles_obj = new Stack<ComandoWhile>();
       whiles_int = new Stack<Integer>();
@@ -64,31 +64,31 @@ class Interpretador {
          while (!arq.fimdoArquivo()) {
             if (palavraAtual.equals(TipoComando.READ)) { // ok
                comando = comandoRead();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (palavraAtual.equals(TipoComando.WRITE)) { // ok
                comando = comandoWrite();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (palavraAtual.equals(TipoComando.WRITELN)) { // ok
                comando = comandoWriteln();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (palavraAtual.equals(TipoComando.ENDP)) { // ok
                comando = comandoEndp();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (palavraAtual.equals(TipoComando.WHILE)) { // ok
                comando = comandoWhile();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (palavraAtual.equals(TipoComando.GOTO)) { // ok
                comando = comandoGoto();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (palavraAtual.equals(TipoComando.ENDW)) {
                comando = comandoEndw();
-               comandos.add(comando);
+               commandos.add(comando);
                saltaLinha();
             } else if (variavel(palavraAtual)) {
                String palavra = arq.proximaPalavraIgnoraEspaco();
@@ -98,7 +98,7 @@ class Interpretador {
                   comando = comandoLabel();
                   palavraAtual = arq.proximaPalavra();
                }
-               comandos.add(comando);
+               commandos.add(comando);
             } else {
                palavraAtual = arq.proximaPalavra();
             }
@@ -183,8 +183,8 @@ class Interpretador {
 
    public void executa() {
       int pc = 0;
-      while (pc < comandos.size()) {
-         pc += comandos.get(pc).executa();
+      while (pc < commandos.size()) {
+         pc += commandos.get(pc).executa();
       }
    }
 
@@ -266,7 +266,7 @@ class Interpretador {
    private Comando comandoEndw() {
       ComandoEndw comando;
       int pc_while = whiles_int.pop();
-      int offset = pc_while - comandos.size();
+      int offset = pc_while - commandos.size();
       comando = new ComandoEndw(offset);
       ComandoWhile comandowhile = whiles_obj.pop();
       comandowhile.setOffset(1 + (-offset));
@@ -290,11 +290,11 @@ class Interpretador {
    }
 
    private void mapearLabel() {
-      Integer put = labels.put(palavraAtual, comandos.size());
+      Integer put = labels.put(palavraAtual, commandos.size());
    }
 
    private void mapearGoto(ComandoGoto comando) {
-      gotos.put(comando, comandos.size());
+      gotos.put(comando, commandos.size());
    }
 
    private Condicao condicao(String opr) {
@@ -316,7 +316,7 @@ class Interpretador {
 
    private void mapearWhile(ComandoWhile comando) {
       whiles_obj.push(comando);
-      whiles_int.push(new Integer(comandos.size()));
+      whiles_int.push(new Integer(commandos.size()));
    }
 
    private void ligarGotos() {
